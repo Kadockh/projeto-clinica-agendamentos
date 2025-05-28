@@ -1,6 +1,13 @@
-import { FormControl, FormLabel, FormMessage } from "@/components/ui/form";
-import { FormItem } from "@/components/ui/form";
-import { FormField } from "@/components/ui/form";
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,16 +16,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { FormControl, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormItem } from "@/components/ui/form";
+import { FormField } from "@/components/ui/form";
 import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
-import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 const loginSchema = z.object({
   email: z
