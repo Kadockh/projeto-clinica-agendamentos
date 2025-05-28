@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 import LoginForm from "./components/login-form";
 import SignUpForm from "./components/sign-up-form";
 
+
 const AuthenticationPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
