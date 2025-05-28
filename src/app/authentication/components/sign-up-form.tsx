@@ -19,7 +19,6 @@ import { authClient } from "@/lib/auth-client";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-
 const registerSchema = z.object({
   name: z.string().trim().min(2, { message: "nome é obrigatório" }).max(50, {
     message: "nome é obrigatório",
@@ -57,17 +56,18 @@ const SignUpForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
-    await authClient.signUp.email({
-      email: values.email,
-      password: values.password,
-      name: values.name,
-    }, {
-      onSuccess: () => {
-        router.push("/dashboard")
+    await authClient.signUp.email(
+      {
+        email: values.email,
+        password: values.password,
+        name: values.name,
+      },
+      {
+        onSuccess: () => {
+          router.push("/dashboard");
+        },
       }
-    }
- 
-  );
+    );
   }
 
   return (
