@@ -13,5 +13,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "cSpell.words": ["geist", "logomark", "postgres", "postgresql"]
+  "cSpell.words": ["geist", "logomark", "postgres", "postgresql", "sonner"]
 }
