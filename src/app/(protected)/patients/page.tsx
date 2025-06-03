@@ -1,4 +1,3 @@
-import { ColumnDef } from "@tanstack/react-table";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";

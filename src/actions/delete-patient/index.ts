@@ -3,28 +3,30 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { z } from "zod";
 
 import { db } from "@/db";
 import { patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
+import { deletePatientSchema } from "./schema";
+
 export const deletePatient = actionClient
-  .schema(
-    z.object({
-      id: z.string().uuid(),
-    })
-  )
+  .schema(deletePatientSchema)
   .action(async ({ parsedInput }) => {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
 
     if (!session?.user) {
-      throw new Error("Unauthorized");
+      throw new Error("Não autorizado");
     }
 
+    if (!session?.user.clinic?.id) {
+      throw new Error("clinica não encontrada");
+    }
+
+    // Verifica se o paciente pertence à clínica do usuário
     const patient = await db.query.patientsTable.findFirst({
       where: eq(patientsTable.id, parsedInput.id),
     });
@@ -33,11 +35,11 @@ export const deletePatient = actionClient
       throw new Error("Paciente não encontrado");
     }
 
-    if (patient.clinicId !== session.user.clinic?.id) {
-      throw new Error("Paciente não encontrado");
+    if (patient.clinicId !== session.user.clinic.id) {
+      throw new Error("Não autorizado a excluir este paciente");
     }
 
     await db.delete(patientsTable).where(eq(patientsTable.id, parsedInput.id));
 
-    revalidatePath("/patients"); // ajuste se o path for diferente
+    revalidatePath("/patients");
   });
