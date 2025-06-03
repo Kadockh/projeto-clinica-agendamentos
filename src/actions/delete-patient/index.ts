@@ -6,11 +6,11 @@ import { headers } from "next/headers";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { doctorsTable } from "@/db/schema";
+import { patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
-export const deleteDoctor = actionClient
+export const deletePatient = actionClient
   .schema(
     z.object({
       id: z.string().uuid(),
@@ -20,18 +20,24 @@ export const deleteDoctor = actionClient
     const session = await auth.api.getSession({
       headers: await headers(),
     });
+
     if (!session?.user) {
       throw new Error("Unauthorized");
     }
-    const doctor = await db.query.doctorsTable.findFirst({
-      where: eq(doctorsTable.id, parsedInput.id),
+
+    const patient = await db.query.patientsTable.findFirst({
+      where: eq(patientsTable.id, parsedInput.id),
     });
-    if (!doctor) {
-      throw new Error("Médico não encontrado");
+
+    if (!patient) {
+      throw new Error("Paciente não encontrado");
     }
-    if (doctor.clinicId !== session.user.clinic?.id) {
-      throw new Error("Médico não encontrado");
+
+    if (patient.clinicId !== session.user.clinic?.id) {
+      throw new Error("Paciente não encontrado");
     }
-    await db.delete(doctorsTable).where(eq(doctorsTable.id, parsedInput.id));
-    revalidatePath("/doctors");
+
+    await db.delete(patientsTable).where(eq(patientsTable.id, parsedInput.id));
+
+    revalidatePath("/patients"); // ajuste se o path for diferente
   });
