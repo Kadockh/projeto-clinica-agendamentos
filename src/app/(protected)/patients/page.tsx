@@ -1,7 +1,9 @@
+import { ColumnDef } from "@tanstack/react-table";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { DataTable } from "@/components/ui/data-table";
 import {
   PageActions,
   PageContainer,
@@ -16,7 +18,7 @@ import { patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import AddPatientButton from "./_components/add-patient-button";
-import PatientCard from "./_components/patient-card";
+import { PatientsTableColumns } from "./_components/table-columns";
 
 const PatientsPage = async () => {
   const session = await auth.api.getSession({
@@ -50,39 +52,7 @@ const PatientsPage = async () => {
         </PageActions>
       </PageHeader>
       <PageContent>
-        {patients.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {patients.map((patient) => (
-              <PatientCard key={patient.id} patient={patient} />
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="rounded-full bg-muted p-4 mb-4">
-              <svg
-                className="h-8 w-8 text-muted-foreground"
-                fill="none"
-                height="24"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                width="24"
-                xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold mb-2">
-              Nenhum paciente cadastrado
-            </h3>
-            <p className="text-muted-foreground mb-4 max-w-sm">
-              Você ainda não possui pacientes cadastrados. Clique no botão acima
-              para adicionar o primeiro paciente.
-            </p>
-          </div>
-        )}
+        <DataTable columns={PatientsTableColumns} data={patients} />
       </PageContent>
     </PageContainer>
   );
