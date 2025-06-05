@@ -66,4 +66,6 @@ const AppointmentsPage = async () => {
   );
 };
 
+
+
 export default AppointmentsPage;
