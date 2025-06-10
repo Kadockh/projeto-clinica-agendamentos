@@ -2,6 +2,7 @@
 
 import {
   CalendarDays,
+  CreditCard,
   LayoutDashboard,
   LogOut,
   Stethoscope,
@@ -89,6 +90,23 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Outros</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+         
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild isActive={pathname === '/subscription'}>
+                    <Link href="/subscription">
+                      <CreditCard />
+                      <span>Assinatura</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+         
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
