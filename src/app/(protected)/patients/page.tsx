@@ -17,26 +17,24 @@ import { patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import AddPatientButton from "./_components/add-patient-button";
-import { PatientsTableColumns } from "./_components/table-columns";
+import { patientsTableColumns } from "./_components/table-columns";
 
 const PatientsPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
   if (!session?.user) {
     redirect("/authentication");
   }
-
   if (!session.user.clinic) {
     redirect("/clinic-form");
   }
-
+  if (!session.user.plan) {
+    redirect("/new-subscription");
+  }
   const patients = await db.query.patientsTable.findMany({
     where: eq(patientsTable.clinicId, session.user.clinic.id),
-    orderBy: (patients, { desc }) => [desc(patients.createdAt)],
   });
-
   return (
     <PageContainer>
       <PageHeader>
@@ -51,7 +49,7 @@ const PatientsPage = async () => {
         </PageActions>
       </PageHeader>
       <PageContent>
-        <DataTable columns={PatientsTableColumns} data={patients} />
+        <DataTable data={patients} columns={patientsTableColumns} />
       </PageContent>
     </PageContainer>
   );

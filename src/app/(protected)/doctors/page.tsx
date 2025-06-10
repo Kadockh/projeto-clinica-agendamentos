@@ -22,9 +22,11 @@ const DoctorsPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  console.log(session);
   if (!session?.user) {
     redirect("/authentication");
+  }
+  if (!session.user.plan) {
+    redirect("/new-subscription");
   }
   if (!session.user.clinic) {
     redirect("/clinic-form");
