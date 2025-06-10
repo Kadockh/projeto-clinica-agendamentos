@@ -16,6 +16,9 @@ export const usersTable = pgTable("users", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  plan: text("plan"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
@@ -97,7 +100,7 @@ export const usersToClinicsTableRelations = relations(
       fields: [usersToClinicsTable.clinicId],
       references: [clinicsTable.id],
     }),
-  })
+  }),
 );
 
 export const clinicsTableRelations = relations(clinicsTable, ({ many }) => ({
@@ -135,7 +138,7 @@ export const doctorsTableRelations = relations(
       references: [clinicsTable.id],
     }),
     appointments: many(appointmentsTable),
-  })
+  }),
 );
 
 export const patientSexEnum = pgEnum("patient_sex", ["male", "female"]);
@@ -163,7 +166,7 @@ export const patientsTableRelations = relations(
       references: [clinicsTable.id],
     }),
     appointments: many(appointmentsTable),
-  })
+  }),
 );
 
 export const appointmentsTable = pgTable("appointments", {
@@ -200,5 +203,5 @@ export const appointmentsTableRelations = relations(
       fields: [appointmentsTable.doctorId],
       references: [doctorsTable.id],
     }),
-  })
+  }),
 );
